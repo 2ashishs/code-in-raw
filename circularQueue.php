@@ -1,40 +1,42 @@
 <?php
+/*
+Problem: Implement a circular queue with add (enque) & remove (deque) operations
+Solution:
+class nQdQ defines the template for circular queue with following methods,
+	nQ($node) method for adding nodes at tail,
+	dQ() method for removing nodes from head,
+	printQ() method to print the circular queue.
+$buffer implements the circular queue.
+*/
 class nQdQ{
 	public $cQ; //Circular Queue
 	public $maxSize = 5; //Maximum size of circular queue set here
-	public $H=-1; //Initially -1
-	public $T=-1; //Initially -1
+	public $H=0; //Initially 0
+	public $T=0; //Initially 0
 	public $empty=true; //Flag to check if Q is empty. Initially Q is empty
 	
 	function nQdQ(){
-		$this->cQ = array_fill(0, $this->maxSize, -1); //-1 represents empty element - could be any other number
+		$this->cQ = array_fill(0, $this->maxSize, 0); //Initialize array size and fill the array with 0s
 	}
 	
 	//Add node to circular Q (at Tail)
 	function nQ($node){
-		//Case1: Q empty initially
-		if ($this->empty == true && $this->H == -1){
-			$this->empty = FALSE;
-			$this->H = 0;
-			$this->T = 0;
+		//Case1: Q empty
+		if ($this->empty == true){
+			$this->empty = false;
 			$this->cQ[$this->T] = $node;
 			echo $node, " added\n";
-		}//Case2: Q empty (after nQ & dQ operations)
-		elseif ($this->empty == true){
-			$this->cQ[$this->T] == $node;
+		}//Case2: Q not empty & not full
+		elseif ( ($this->T + 1) % $this->maxSize != $this->H ) {
+			$this->T = ($this->T + 1) % $this->maxSize;
+			$this->cQ[$this->T] = $node;
 			echo $node, " added\n";
-		}//Case3: Q non empty
+		}//Case3: Q full
 		else {
-			//Case3A: Q full
-			if (($this->T + 1) % $this->maxSize == $this->H) {
-				echo "Q full, can't add ",$node,"\n";
-			}//Case3B: Q not full
-			else {
-				$this->T = ($this->T + 1) % $this->maxSize;
-				$this->cQ[$this->T] = $node;
-				echo $node, " added\n";
-			}
+			echo "Q full, ",$node," not added\n";
+			return;
 		}
+		echo "head:",$this->H," tail:",$this->T,"\n";
 	}
 	
 	//Remove node from circular Q (from Head)
@@ -42,21 +44,20 @@ class nQdQ{
 		//Case1: Q empty
 		if ($this->empty == true){
 			echo "Q empty\n";
+			return;
 		}//Case2: Only one element left
 		elseif ($this->H == $this->T){
 			$this->empty = true;
 			echo $this->cQ[$this->H], " deleted\n";
-			$this->cQ[$this->H] = -1; //reset node
 		}//Case3: More than one element
 		else{
 			echo $this->cQ[$this->H], " deleted\n";
-			$this->cQ[$this->H] = -1; //reset node
 			$this->H = ($this->H + 1) % $this->maxSize;
 		}
+		echo "head:",$this->H," tail:",$this->T,"\n";
 	}
 	
 	function printQ(){
-		echo "head:",$this->H," tail:",$this->T,"\n";
 		//Case1: Q empty
 		if ($this->empty == true){
 			echo "Can't print empty Q\n";
@@ -92,5 +93,7 @@ $buffer->dQ();
 $buffer->printQ();
 //fill Q
 $buffer->nQ(12);
+$buffer->nQ(36);
+$buffer->nQ(48);
 $buffer->printQ();
 ?>

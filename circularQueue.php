@@ -23,17 +23,14 @@ class nQdQ{
 		elseif ($this->empty == true){
 			$this->cQ[$this->T] == $node;
 			echo $node, " added\n";
-		}//Case3: Q non empty
+		}//Case3: Q not empty & not full
+		elseif ( ($this->T + 1) % $this->maxSize != $this->H ) {
+			$this->T = ($this->T + 1) % $this->maxSize;
+			$this->cQ[$this->T] = $node;
+			echo $node, " added\n";
+		}//Case4: Q full
 		else {
-			//Case3A: Q full
-			if (($this->T + 1) % $this->maxSize == $this->H) {
-				echo "Q full, can't add ",$node,"\n";
-			}//Case3B: Q not full
-			else {
-				$this->T = ($this->T + 1) % $this->maxSize;
-				$this->cQ[$this->T] = $node;
-				echo $node, " added\n";
-			}
+			echo "Q full, ",$node," not added\n";
 		}
 	}
 	
@@ -92,5 +89,6 @@ $buffer->dQ();
 $buffer->printQ();
 //fill Q
 $buffer->nQ(12);
+$buffer->nQ(15);
 $buffer->printQ();
 ?>
